@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{43B3E625-9470-4D3A-92F0-EF564FF90292}</ProjectGuid>
+    <ProjectGuid>{ADD7C1C8-71FA-42D9-B707-ED97E0934FCD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>StroopwaffleII</RootNamespace>
-    <AssemblyName>StroopwaffleII</AssemblyName>
+    <RootNamespace>StroopwaffleII_Shared</RootNamespace>
+    <AssemblyName>StroopwaffleII-Shared</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -31,12 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RagePluginHookSDK">
-      <HintPath>..\..\..\..\..\Downloads\RAGEPluginHook_0_41_965_8352_ALPHA (1)\SDK\RagePluginHookSDK.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,16 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntryPoint.cs" />
-    <Compile Include="GameInitializer.cs" />
-    <Compile Include="NetworkManager.cs" />
+    <Compile Include="NetworkClient.cs" />
+    <Compile Include="NetworkEntity.cs" />
+    <Compile Include="NetworkPed.cs" />
+    <Compile Include="NetworkVehicle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\StroopwaffleII-Shared\StroopwaffleII-Shared.csproj">
-      <Project>{add7c1c8-71fa-42d9-b707-ed97e0934fcd}</Project>
-      <Name>StroopwaffleII-Shared</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

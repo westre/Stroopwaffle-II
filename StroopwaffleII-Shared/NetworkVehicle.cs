@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StroopwaffleII {
-    class NetworkClient {
-
-        public bool LocalPlayer { get; set; }
-
-        public NetworkClient() {
+namespace StroopwaffleII_Shared {
+    public class NetworkVehicle : NetworkEntity {
+        public NetworkVehicle(int id) : base(id) {
 
         }
     }

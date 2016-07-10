@@ -11,12 +11,14 @@ using System.Windows.Forms;
 
 namespace StroopwaffleII {
     public class EntryPoint {
-
         private GameInitializer GameInitializer { get; set; }
+        private NetworkManager NetworkManager { get; set; }
 
         public EntryPoint() {
             GameInitializer = new GameInitializer();
             GameInitializer.DisableScripts();
+
+            NetworkManager = new NetworkManager();
 
             while (true) {
                 GameInitializer.DisableByFrame();

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StroopwaffleII {
-    class NetworkEntity {
+namespace StroopwaffleII_Shared {
+    public class NetworkEntity {
 
         protected int ID { get; set; }
 
