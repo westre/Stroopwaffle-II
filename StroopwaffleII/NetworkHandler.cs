@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Rage;
 using System.Threading;
+using StroopwaffleII_Shared;
 
 namespace StroopwaffleII {
     public class NetworkHandler {
@@ -38,7 +39,16 @@ namespace StroopwaffleII {
                     NetConnectionStatus status = (NetConnectionStatus)netIncomingMessage.ReadByte();
 
                     if (status == NetConnectionStatus.Connected) {
-                        Console.WriteLine("Connected");
+                        Game.DisplayNotification("Connected");
+
+                        HelloServerPacket helloServer = new HelloServerPacket();
+                        helloServer.Name = "westre";
+
+                        NetOutgoingMessage message = LidgrenClient.CreateMessage();
+                        helloServer.Pack(message);
+                        LidgrenClient.SendMessage(message, NetDeliveryMethod.ReliableOrdered);
+
+
                         LidgrenClient.FlushSendQueue();
                     }
                 }

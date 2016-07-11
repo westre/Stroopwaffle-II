@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Lidgren.Network;
 using System.Net;
 using System.Threading;
+using StroopwaffleII_Shared;
 
 namespace StroopwaffleII_Server {
     class Server {
@@ -50,6 +51,26 @@ namespace StroopwaffleII_Server {
                             else if (status == NetConnectionStatus.Disconnected) {
                                 Console.WriteLine("|_ disconnected");
                             }
+                            break;
+                        case NetIncomingMessageType.Data:
+                            PacketType packetType = (PacketType)incomingMessage.ReadByte();
+                            IPacket packet;
+
+                            switch (packetType) {
+                                case PacketType.HelloServer:
+                                    packet = new HelloServerPacket();
+                                    break;
+                                default:
+                                    packet = null;
+                                    break;
+                            }
+
+                            packet.Unpack(incomingMessage);
+
+                            if(packet is HelloServerPacket) {
+                                Console.WriteLine("Hello from " + ((HelloServerPacket)packet).Name);
+                            }
+
                             break;
                     }
                     NetServer.Recycle(incomingMessage);

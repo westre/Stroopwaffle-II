@@ -35,7 +35,7 @@ namespace StroopwaffleII {
                     if (NetworkHandler.LidgrenClient.ServerConnection == null) {
                         NetConnection connection = NetworkHandler.Connect("192.168.1.133");
                         if (connection != null) {
-                            Game.DisplayNotification("Connected");
+                            Game.DisplayNotification("Connecting...");
                         }
                     }
                     else {
