@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StroopwaffleII-Shared", "St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StroopwaffleII-Server", "StroopwaffleII-Server\StroopwaffleII-Server.csproj", "{C222AA51-2E89-4D45-AFA7-8AF4549D987A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StroopwaffleII-Dummy", "StroopwaffleII-Dummy\StroopwaffleII-Dummy.csproj", "{479A9800-BC53-47BD-A1A9-E7FFCBD76C87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lidgren.Network", "Lidgren.Network\Lidgren.Network.csproj", "{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{C222AA51-2E89-4D45-AFA7-8AF4549D987A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C222AA51-2E89-4D45-AFA7-8AF4549D987A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C222AA51-2E89-4D45-AFA7-8AF4549D987A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{479A9800-BC53-47BD-A1A9-E7FFCBD76C87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{479A9800-BC53-47BD-A1A9-E7FFCBD76C87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{479A9800-BC53-47BD-A1A9-E7FFCBD76C87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{479A9800-BC53-47BD-A1A9-E7FFCBD76C87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49BA1C69-6104-41AC-A5D8-B54FA9F696E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

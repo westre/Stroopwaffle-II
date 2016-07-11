@@ -18,6 +18,8 @@ namespace StroopwaffleII_Server {
             config.MaximumConnections = 100;
 
             NetServer = new NetServer(config);
+            NetServer.Start();
+
             Thread serverThread = new Thread(ServerThread);
             serverThread.Start();
         }

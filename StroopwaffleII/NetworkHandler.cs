@@ -8,7 +8,7 @@ using Rage;
 using System.Threading;
 
 namespace StroopwaffleII {
-    class NetworkHandler {
+    public class NetworkHandler {
 
         private NetPeerConfiguration Config { get; set; }
         public NetClient LidgrenClient { get; set; }
@@ -18,7 +18,6 @@ namespace StroopwaffleII {
             Config.AutoFlushSendQueue = false;
 
             LidgrenClient = new NetClient(Config);
-            LidgrenClient.RegisterReceivedCallback(new SendOrPostCallback(ReadPackets));
             LidgrenClient.Start();
         }
 
@@ -31,7 +30,7 @@ namespace StroopwaffleII {
             LidgrenClient.Disconnect("Bye.");
         }
 
-        public void ReadPackets(object peer) {
+        public void ReadPackets() {
             NetIncomingMessage netIncomingMessage;
 
             while ((netIncomingMessage = LidgrenClient.ServerConnection.Peer.ReadMessage()) != null) {
@@ -39,7 +38,7 @@ namespace StroopwaffleII {
                     NetConnectionStatus status = (NetConnectionStatus)netIncomingMessage.ReadByte();
 
                     if (status == NetConnectionStatus.Connected) {
-                        Game.DisplayNotification("Connected " + Guid.NewGuid());
+                        Console.WriteLine("Connected");
                         LidgrenClient.FlushSendQueue();
                     }
                 }

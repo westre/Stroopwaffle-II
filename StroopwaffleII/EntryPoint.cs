@@ -32,15 +32,19 @@ namespace StroopwaffleII {
                 if (Game.IsKeyDown(Keys.NumPad0)) {
                     Game.DisplayNotification("Pressed NumPad0" + Guid.NewGuid());
 
-                    if(NetworkHandler.LidgrenClient.ServerConnection == null) {
+                    if (NetworkHandler.LidgrenClient.ServerConnection == null) {
                         NetConnection connection = NetworkHandler.Connect("192.168.1.133");
-                        if(connection != null) {
+                        if (connection != null) {
                             Game.DisplayNotification("Connected");
                         }
                     }
                     else {
                         NetworkHandler.Disconnect();
                         Game.DisplayNotification("Disconnected");
+                    }
+
+                    if (NetworkHandler.LidgrenClient.ServerConnection != null) {
+                        NetworkHandler.ReadPackets();
                     }
                 }
 
