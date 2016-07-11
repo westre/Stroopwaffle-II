@@ -24,7 +24,11 @@ namespace StroopwaffleII {
             while (true) {
                 GameInitializer.DisableByFrame();
                 GameInitializer.RemoveAllEntities();
-                
+
+                if (Game.IsKeyDown(Keys.NumPad0)) {
+                    Game.DisplayNotification("Pressed NumPad0" + Guid.NewGuid());
+                }
+
                 // Allow other plugins and the game to process.
                 GameFiber.Yield();
             }
