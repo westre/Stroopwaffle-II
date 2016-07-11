@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace StroopwaffleII_Shared {
     public class NetworkEntity {
 
-        protected int ID { get; set; }
+        public int ID { get; set; }
 
         public NetworkEntity(int id) {
             this.ID = id;

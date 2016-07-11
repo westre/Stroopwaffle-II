@@ -12,11 +12,14 @@ namespace StroopwaffleII_Server {
     class Server {
 
         private NetServer NetServer { get; set; }
+        private NetworkManager NetworkManager { get; set; }
 
         public Server() {
             NetPeerConfiguration config = new NetPeerConfiguration("sw2");
             config.Port = 7777;
             config.MaximumConnections = 100;
+
+            NetworkManager = new NetworkManager();
 
             NetServer = new NetServer(config);
             NetServer.Start();
@@ -72,8 +75,22 @@ namespace StroopwaffleII_Server {
 
                             packet.Unpack(incomingMessage);
 
+                            // HelloClientPacket -> HelloServerPacket -> AddClient
                             if(packet is HelloServerPacket) {
                                 Console.WriteLine("Hello from " + ((HelloServerPacket)packet).Name);
+
+                                // create the client to be held on the server
+                                NetworkClient netClient = CreateClient((HelloServerPacket)packet);
+
+                                // then send this newly created client to everyone else to be held
+                                AddClientPacket addClient = new AddClientPacket();
+                                addClient.ID = netClient.ID;
+                                addClient.Name = netClient.Name;
+
+                                NetOutgoingMessage message = NetServer.CreateMessage();
+                                addClient.Pack(message);
+                                // send to all
+                                NetServer.SendMessage(message, NetServer.Connections, NetDeliveryMethod.ReliableOrdered, 0);
                             }
 
                             break;
@@ -82,6 +99,18 @@ namespace StroopwaffleII_Server {
                 }
                 Thread.Sleep(1);
             }
+        }
+
+        private NetworkClient CreateClient(HelloServerPacket packet) {
+            int freeId = NetworkManager.AllocateEntityID();
+
+            NetworkClient newClient = new NetworkClient(freeId);
+            newClient.Name = packet.Name;
+
+            NetworkManager.NetworkClients.Add(newClient);
+            Console.WriteLine("New networkClient added");
+
+            return newClient;
         }
 
         static void Main(string[] args) {

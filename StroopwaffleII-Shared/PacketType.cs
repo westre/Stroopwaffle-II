@@ -8,5 +8,6 @@ namespace StroopwaffleII_Shared {
     public enum PacketType {
         HelloServer,
         HelloClient,
+        AddClient,
     };
 }

@@ -13,6 +13,10 @@ namespace StroopwaffleII_Shared {
         private bool[] EntityIDs { get; set; }
 
         public NetworkManager() {
+            NetworkClients = new List<NetworkClient>();
+            NetworkPeds = new List<NetworkPed>();
+            NetworkVehicles = new List<NetworkVehicle>();
+
             EntityIDs = new bool[1000];
         }
 

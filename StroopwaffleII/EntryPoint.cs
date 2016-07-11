@@ -14,14 +14,11 @@ using Lidgren.Network;
 namespace StroopwaffleII {
     public class EntryPoint {
         private GameInitializer GameInitializer { get; set; }
-        private NetworkManager NetworkManager { get; set; }
         private NetworkHandler NetworkHandler { get; set; }
 
         public EntryPoint() {
             GameInitializer = new GameInitializer();
             GameInitializer.DisableScripts();
-
-            NetworkManager = new NetworkManager();
 
             NetworkHandler = new NetworkHandler();
 

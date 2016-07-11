@@ -13,10 +13,13 @@ namespace StroopwaffleII {
 
         private NetPeerConfiguration Config { get; set; }
         public NetClient LidgrenClient { get; set; }
+        private NetworkManager NetworkManager { get; set; }
 
         public NetworkHandler() {
             Config = new NetPeerConfiguration("sw2");
             //Config.AutoFlushSendQueue = false;
+
+            NetworkManager = new NetworkManager();
 
             LidgrenClient = new NetClient(Config);
             LidgrenClient.Start();
@@ -41,6 +44,7 @@ namespace StroopwaffleII {
 
                     switch (packetType) {
                         case PacketType.HelloClient: packet = new HelloClientPacket(); break;
+                        case PacketType.AddClient: packet = new AddClientPacket(); break;
                         default: packet = null; break;
                     }
 
@@ -49,6 +53,26 @@ namespace StroopwaffleII {
                     // received our first packet from the server
                     if (packet is HelloClientPacket) {
                         Game.DisplayNotification("Hello from Server: " + ((HelloClientPacket)packet).Payload);
+
+                        // send our information to the server for to be processed
+                        HelloServerPacket helloServer = new HelloServerPacket();
+                        helloServer.Name = "westre";
+
+                        NetOutgoingMessage message = LidgrenClient.CreateMessage();
+                        helloServer.Pack(message);
+                        LidgrenClient.SendMessage(message, NetDeliveryMethod.ReliableOrdered);
+                    }
+                    else if (packet is AddClientPacket) {
+                        Game.DisplayNotification("AddClientPacket");
+
+                        AddClientPacket addClientPacket = (AddClientPacket)packet;
+
+                        NetworkClient addClient = new NetworkClient(addClientPacket.ID);
+                        addClient.Name = addClientPacket.Name;
+
+                        NetworkManager.NetworkClients.Add(addClient);
+
+                        Game.DisplayNotification("AddClientPacket added: " + NetworkManager.NetworkClients.Count);
                     }
                 }
 

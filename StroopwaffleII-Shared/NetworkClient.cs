@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace StroopwaffleII_Shared {
-    public class NetworkClient {
+    public class NetworkClient : NetworkEntity {
 
         public bool LocalPlayer { get; set; }
 
-        public NetworkClient() {
+        public string Name { get; set; }
+
+        public NetworkClient(int id) : base(id) {
 
         }
     }
