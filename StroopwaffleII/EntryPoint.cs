@@ -42,10 +42,10 @@ namespace StroopwaffleII {
                         NetworkHandler.Disconnect();
                         Game.DisplayNotification("Disconnected");
                     }
+                }
 
-                    if (NetworkHandler.LidgrenClient.ServerConnection != null) {
-                        NetworkHandler.ReadPackets();
-                    }
+                if (NetworkHandler.LidgrenClient != null && NetworkHandler.LidgrenClient.ServerConnection != null) {
+                    NetworkHandler.ReadPackets();
                 }
 
                 // Allow other plugins and the game to process.

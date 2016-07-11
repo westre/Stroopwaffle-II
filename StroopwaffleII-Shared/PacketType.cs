@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 namespace StroopwaffleII_Shared {
     public enum PacketType {
         HelloServer,
+        HelloClient,
     };
 }

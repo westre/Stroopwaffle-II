@@ -16,7 +16,7 @@ namespace StroopwaffleII {
 
         public NetworkHandler() {
             Config = new NetPeerConfiguration("sw2");
-            Config.AutoFlushSendQueue = false;
+            //Config.AutoFlushSendQueue = false;
 
             LidgrenClient = new NetClient(Config);
             LidgrenClient.Start();
@@ -35,23 +35,23 @@ namespace StroopwaffleII {
             NetIncomingMessage netIncomingMessage;
 
             while ((netIncomingMessage = LidgrenClient.ServerConnection.Peer.ReadMessage()) != null) {
-                if (netIncomingMessage.MessageType == NetIncomingMessageType.StatusChanged) {
-                    NetConnectionStatus status = (NetConnectionStatus)netIncomingMessage.ReadByte();
+                if (netIncomingMessage.MessageType == NetIncomingMessageType.Data) {
+                    PacketType packetType = (PacketType)netIncomingMessage.ReadByte();
+                    IPacket packet;
 
-                    if (status == NetConnectionStatus.Connected) {
-                        Game.DisplayNotification("Connected");
+                    switch (packetType) {
+                        case PacketType.HelloClient: packet = new HelloClientPacket(); break;
+                        default: packet = null; break;
+                    }
 
-                        HelloServerPacket helloServer = new HelloServerPacket();
-                        helloServer.Name = "westre";
+                    packet.Unpack(netIncomingMessage);
 
-                        NetOutgoingMessage message = LidgrenClient.CreateMessage();
-                        helloServer.Pack(message);
-                        LidgrenClient.SendMessage(message, NetDeliveryMethod.ReliableOrdered);
-
-
-                        LidgrenClient.FlushSendQueue();
+                    // received our first packet from the server
+                    if (packet is HelloClientPacket) {
+                        Game.DisplayNotification("Hello from Server: " + ((HelloClientPacket)packet).Payload);
                     }
                 }
+
                 LidgrenClient.Recycle(netIncomingMessage);
             }
         }

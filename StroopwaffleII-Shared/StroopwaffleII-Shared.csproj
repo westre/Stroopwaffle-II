@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelloClientPacket.cs" />
     <Compile Include="HelloServerPacket.cs" />
     <Compile Include="NetworkClient.cs" />
     <Compile Include="NetworkEntity.cs" />

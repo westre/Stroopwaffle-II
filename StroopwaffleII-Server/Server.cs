@@ -47,6 +47,15 @@ namespace StroopwaffleII_Server {
 
                             if (status == NetConnectionStatus.Connected) {
                                 Console.WriteLine("|_ connected");
+
+                                HelloClientPacket helloClient = new HelloClientPacket();
+                                helloClient.Payload = NetUtility.ToHexString(incomingMessage.SenderConnection.RemoteUniqueIdentifier) + " " + status + ": " + reason;
+
+                                NetOutgoingMessage message = NetServer.CreateMessage();
+                                helloClient.Pack(message);
+                                NetServer.SendMessage(message, incomingMessage.SenderConnection, NetDeliveryMethod.ReliableOrdered);
+
+                                Console.WriteLine("Sent message");
                             }
                             else if (status == NetConnectionStatus.Disconnected) {
                                 Console.WriteLine("|_ disconnected");
@@ -57,12 +66,8 @@ namespace StroopwaffleII_Server {
                             IPacket packet;
 
                             switch (packetType) {
-                                case PacketType.HelloServer:
-                                    packet = new HelloServerPacket();
-                                    break;
-                                default:
-                                    packet = null;
-                                    break;
+                                case PacketType.HelloServer: packet = new HelloServerPacket(); break;
+                                default: packet = null; break;
                             }
 
                             packet.Unpack(incomingMessage);
