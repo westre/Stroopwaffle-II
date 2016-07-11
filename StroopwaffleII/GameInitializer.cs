@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace StroopwaffleII {
     class GameInitializer {
+        // Make NetworkPed etc a subclass for it for the client so it can store actual player peds etc
 
         private string[] disabledScripts = {
             "am_mission_launch", "bugstar_mission_export", "fm_mission_controller", "fm_mission_creator", "sp_editor_mission_instance",

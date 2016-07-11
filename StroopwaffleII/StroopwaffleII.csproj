@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="EntryPoint.cs" />
     <Compile Include="GameInitializer.cs" />
-    <Compile Include="NetworkManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +54,9 @@
       <Project>{add7c1c8-71fa-42d9-b707-ed97e0934fcd}</Project>
       <Name>StroopwaffleII-Shared</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

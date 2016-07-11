@@ -43,13 +43,14 @@
   <ItemGroup>
     <Compile Include="NetworkClient.cs" />
     <Compile Include="NetworkEntity.cs" />
+    <Compile Include="NetworkManager.cs" />
     <Compile Include="NetworkPed.cs" />
     <Compile Include="NetworkVehicle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>COPY "$(TargetDir)$(TargetFileName)" "D:\Steam\steamapps\common\Grand Theft Auto V\Plugins"</PostBuildEvent>
+    <PostBuildEvent>COPY "$(TargetDir)$(TargetFileName)" "D:\Steam\steamapps\common\Grand Theft Auto V"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
