@@ -72,6 +72,10 @@ namespace StroopwaffleII {
 
                         NetworkManager.NetworkClients.Add(addClient);
 
+                        /*var removeClient = from client in NetworkManager.NetworkClients
+                                           where client.ID == 2
+                                           select client;*/
+
                         Game.DisplayNotification("AddClientPacket added: " + NetworkManager.NetworkClients.Count);
                     }
                 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lidgren.Network;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,14 @@ namespace StroopwaffleII_Shared {
                 }
             }
             return -1;
+        }
+
+        public NetworkClient Find(NetConnection netConnection) {
+            var thisClient = (from client in NetworkClients
+                             where client.NetConnection == netConnection
+                             select client).FirstOrDefault();
+
+            return thisClient; 
         }
     }
 }

@@ -13,6 +13,7 @@ namespace StroopwaffleII_Server {
 
         private NetServer NetServer { get; set; }
         private NetworkManager NetworkManager { get; set; }
+        private SendUpdatesThread SendUpdatesThread { get; set; }
 
         public Server() {
             NetPeerConfiguration config = new NetPeerConfiguration("sw2");
@@ -26,6 +27,12 @@ namespace StroopwaffleII_Server {
 
             Thread serverThread = new Thread(ServerThread);
             serverThread.Start();
+
+            SendUpdatesThread = new SendUpdatesThread(this);
+        }
+
+        public void UpdateThread() {
+
         }
 
         public void ServerThread() {
@@ -80,7 +87,7 @@ namespace StroopwaffleII_Server {
                                 Console.WriteLine("Hello from " + ((HelloServerPacket)packet).Name);
 
                                 // create the client to be held on the server
-                                NetworkClient netClient = CreateClient((HelloServerPacket)packet);
+                                NetworkClient netClient = CreateClient((HelloServerPacket)packet, incomingMessage.SenderConnection);
 
                                 // then send this newly created client to everyone else to be held
                                 AddClientPacket addClient = new AddClientPacket();
@@ -101,11 +108,12 @@ namespace StroopwaffleII_Server {
             }
         }
 
-        private NetworkClient CreateClient(HelloServerPacket packet) {
+        private NetworkClient CreateClient(HelloServerPacket packet, NetConnection netConnection) {
             int freeId = NetworkManager.AllocateEntityID();
 
             NetworkClient newClient = new NetworkClient(freeId);
             newClient.Name = packet.Name;
+            newClient.NetConnection = netConnection;
 
             NetworkManager.NetworkClients.Add(newClient);
             Console.WriteLine("New networkClient added");
