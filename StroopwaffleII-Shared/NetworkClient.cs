@@ -13,8 +13,10 @@ namespace StroopwaffleII_Shared {
         public string Name { get; set; }
         public long LidgrenId { get; set; }
 
-        public NetworkClient(int id) : base(id) {
+        public NetworkPed NetworkPed { get; set; }
 
+        public NetworkClient(int id) : base(id) {
+            NetworkPed = new NetworkPed();
         }
     }
 }

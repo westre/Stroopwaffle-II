@@ -16,6 +16,8 @@ namespace StroopwaffleII {
         private GameInitializer GameInitializer { get; set; }
         private NetworkHandler NetworkHandler { get; set; }
         private SendUpdatesThread SendUpdatesThread { get; set; }
+        private GraphicsRenderer GraphicsRenderer { get; set; }
+        private Renderer Renderer { get; set; }
 
         public EntryPoint() {
             GameInitializer = new GameInitializer();
@@ -24,6 +26,8 @@ namespace StroopwaffleII {
             NetworkHandler = new NetworkHandler();
 
             SendUpdatesThread = new SendUpdatesThread(NetworkHandler);
+            GraphicsRenderer = new GraphicsRenderer(NetworkHandler);
+            Renderer = new Renderer(NetworkHandler);
 
             while (true) {
                 GameInitializer.DisableByFrame();

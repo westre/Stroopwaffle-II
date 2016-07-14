@@ -55,6 +55,7 @@ namespace StroopwaffleII {
                         case PacketType.HelloClient: packet = new HelloClientPacket(); break;
                         case PacketType.AddClient: packet = new AddClientPacket(); break;
                         case PacketType.RemoveClient: packet = new RemoveClientPacket(); break;
+                        case PacketType.PlayerPed: packet = new PlayerPedPacket(); break;
                         default: packet = null; break;
                     }
 
@@ -98,6 +99,22 @@ namespace StroopwaffleII {
                         RemoveClientPacket removeClientPacket = (RemoveClientPacket)packet;
 
                         NetworkManager.DestroyClient(removeClientPacket.LidgrenId);
+                    }
+                    else if(packet is PlayerPedPacket) {
+                        PlayerPedPacket playerPedPacket = (PlayerPedPacket)packet;
+
+                        NetworkClient networkClient = NetworkManager.FindClientById(playerPedPacket.ParentId);
+                        if(networkClient != null) {
+                            networkClient.NetworkPed.PosX = playerPedPacket.PosX;
+                            networkClient.NetworkPed.PosY = playerPedPacket.PosY;
+                            networkClient.NetworkPed.PosZ = playerPedPacket.PosZ;
+                            networkClient.NetworkPed.Pitch = playerPedPacket.Pitch;
+                            networkClient.NetworkPed.Roll = playerPedPacket.Roll;
+                            networkClient.NetworkPed.Yaw = playerPedPacket.Yaw;
+                        }
+                        else {
+                            Console.WriteLine("Shit.. networkClient == null @ PlayerPedPacket, NetworkHandler::ReadPackets()");
+                        }
                     }
                 }
 

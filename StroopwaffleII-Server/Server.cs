@@ -59,7 +59,7 @@ namespace StroopwaffleII_Server {
                                 NetServer.SendMessage(message, incomingMessage.SenderConnection, NetDeliveryMethod.ReliableOrdered);
                             }
                             else if (status == NetConnectionStatus.Disconnected) {
-                                NetworkClient networkClient = NetworkManager.FindClient(incomingMessage.SenderConnection.RemoteUniqueIdentifier);
+                                NetworkClient networkClient = NetworkManager.FindClientByLidgrenId(incomingMessage.SenderConnection.RemoteUniqueIdentifier);
 
                                 RemoveClientPacket removeClient = new RemoveClientPacket();
                                 removeClient.ID = networkClient.ID;
@@ -111,6 +111,26 @@ namespace StroopwaffleII_Server {
                                 Console.WriteLine("Recv PlayerPedPacket");
 
                                 PlayerPedPacket playerPedPacket = (PlayerPedPacket)packet;
+
+                                NetworkClient networkClient = NetworkManager.FindClientById(playerPedPacket.ParentId);
+                                if (networkClient != null) {
+                                    networkClient.NetworkPed.PosX = playerPedPacket.PosX;
+                                    networkClient.NetworkPed.PosY = playerPedPacket.PosY;
+                                    networkClient.NetworkPed.PosZ = playerPedPacket.PosZ;
+                                    networkClient.NetworkPed.Pitch = playerPedPacket.Pitch;
+                                    networkClient.NetworkPed.Roll = playerPedPacket.Roll;
+                                    networkClient.NetworkPed.Yaw = playerPedPacket.Yaw;
+                                }
+                                else {
+                                    Console.WriteLine("Shit.. networkClient == null @ PlayerPedPacket, Server::ServerThread()");
+                                }
+
+                                // TODO anti-cheat measures here
+                                // just send the raw packet to the clients
+                                NetOutgoingMessage message = NetServer.CreateMessage();
+                                playerPedPacket.Pack(message);
+                                // send to all
+                                NetServer.SendMessage(message, NetServer.Connections, NetDeliveryMethod.ReliableOrdered, 0);
 
                                 Console.WriteLine(playerPedPacket.ParentId + " :: " + playerPedPacket.PosX + ", " + playerPedPacket.PosY + ", " + playerPedPacket.PosZ);
                             }

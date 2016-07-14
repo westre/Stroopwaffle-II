@@ -33,12 +33,20 @@ namespace StroopwaffleII_Shared {
             return -1;
         }
 
-        public NetworkClient FindClient(long lidgrenId) {
+        public NetworkClient FindClientByLidgrenId(long lidgrenId) {
             var thisClient = (from client in NetworkClients
                              where client.LidgrenId == lidgrenId
                              select client).FirstOrDefault();
 
             return thisClient; 
+        }
+
+        public NetworkClient FindClientById(int id) {
+            var thisClient = (from client in NetworkClients
+                              where client.ID == id
+                              select client).FirstOrDefault();
+
+            return thisClient;
         }
 
         public NetworkClient CreateClient(HelloServerPacket packet, long lidgrenId) {
@@ -56,8 +64,9 @@ namespace StroopwaffleII_Shared {
         }
 
         public void DestroyClient(long lidgrenId) {
-            NetworkClient client = FindClient(lidgrenId);
+            NetworkClient client = FindClientByLidgrenId(lidgrenId);
             if (client != null) {
+                EntityIDs[client.ID] = false;
                 NetworkClients.Remove(client);
                 Console.WriteLine("Removed networkCLient, size: " + NetworkClients.Count);
             }
