@@ -41,6 +41,14 @@ namespace StroopwaffleII_Shared {
             return thisClient; 
         }
 
+        public NetworkClient GetLocalPlayer() {
+            var thisClient = (from client in NetworkClients
+                              where client.LocalPlayer == true
+                              select client).FirstOrDefault();
+
+            return thisClient;
+        } 
+
         public void Clear() {
             NetworkClients.Clear();
             NetworkPeds.Clear();

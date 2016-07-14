@@ -87,9 +87,11 @@ namespace StroopwaffleII_Server {
                                 AddClientPacket addClient = new AddClientPacket();
                                 addClient.ID = netClient.ID;
                                 addClient.Name = netClient.Name;
+                                addClient.LidgrenId = netClient.LidgrenId;
 
                                 NetOutgoingMessage message = NetServer.CreateMessage();
                                 addClient.Pack(message);
+
                                 // send to all
                                 NetServer.SendMessage(message, NetServer.Connections, NetDeliveryMethod.ReliableOrdered, 0);
                             }

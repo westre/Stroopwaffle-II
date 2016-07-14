@@ -78,14 +78,17 @@ namespace StroopwaffleII {
 
                         NetworkClient addClient = new NetworkClient(addClientPacket.ID);
                         addClient.Name = addClientPacket.Name;
+                        addClient.LidgrenId = addClientPacket.LidgrenId;
 
                         NetworkManager.NetworkClients.Add(addClient);
 
-                        /*var removeClient = from client in NetworkManager.NetworkClients
-                                           where client.ID == 2
-                                           select client;*/
-
                         Game.DisplayNotification("AddClientPacket added: " + NetworkManager.NetworkClients.Count);
+
+                        // Are we the local player?
+                        if(addClient.LidgrenId == LidgrenClient.UniqueIdentifier) {
+                            addClient.LocalPlayer = true;
+                            Game.DisplayNotification("This is the localPlayer");
+                        }
                     }
                 }
 
