@@ -120,6 +120,20 @@ namespace StroopwaffleII_Server {
                                     networkClient.NetworkPed.Pitch = playerPedPacket.Pitch;
                                     networkClient.NetworkPed.Roll = playerPedPacket.Roll;
                                     networkClient.NetworkPed.Yaw = playerPedPacket.Yaw;
+
+                                    networkClient.NetworkPed.Aiming = playerPedPacket.Aiming;
+                                    networkClient.NetworkPed.AimPosX = playerPedPacket.AimPosX;
+                                    networkClient.NetworkPed.AimPosY = playerPedPacket.AimPosY;
+                                    networkClient.NetworkPed.AimPosZ = playerPedPacket.AimPosZ;
+
+                                    networkClient.NetworkPed.Shooting = playerPedPacket.Shooting;
+                                    networkClient.NetworkPed.Walking = playerPedPacket.Walking;
+                                    networkClient.NetworkPed.Running = playerPedPacket.Running;
+                                    networkClient.NetworkPed.Sprinting = playerPedPacket.Sprinting;
+                                    networkClient.NetworkPed.Jumping = playerPedPacket.Jumping;
+                                    networkClient.NetworkPed.Reloading = playerPedPacket.Reloading;
+
+                                    networkClient.NetworkPed.Heading = playerPedPacket.Heading;
                                 }
                                 else {
                                     Console.WriteLine("Shit.. networkClient == null @ PlayerPedPacket, Server::ServerThread()");

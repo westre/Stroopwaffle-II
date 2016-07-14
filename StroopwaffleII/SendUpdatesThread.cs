@@ -1,5 +1,6 @@
 ﻿using Lidgren.Network;
 using Rage;
+using Rage.Native;
 using StroopwaffleII_Shared;
 using System;
 using System.Collections.Generic;
@@ -61,6 +62,20 @@ namespace StroopwaffleII {
             packet.Pitch = Game.LocalPlayer.Character.Rotation.Pitch;
             packet.Roll = Game.LocalPlayer.Character.Rotation.Roll;
             packet.Yaw = Game.LocalPlayer.Character.Rotation.Yaw;
+
+            packet.Aiming = NativeFunction.Natives.IsPlayerFreeAiming<bool>(Game.LocalPlayer);
+            packet.AimPosX = 20f;
+            packet.AimPosY = 20f;
+            packet.AimPosZ = 20f;
+
+            packet.Shooting = Game.LocalPlayer.Character.IsShooting;
+            packet.Walking = Game.LocalPlayer.Character.IsWalking;
+            packet.Running = Game.LocalPlayer.Character.IsRunning;
+            packet.Sprinting = Game.LocalPlayer.Character.IsSprinting;
+            packet.Jumping = Game.LocalPlayer.Character.IsJumping;
+            packet.Reloading = Game.LocalPlayer.Character.IsReloading;
+
+            packet.Heading = Game.LocalPlayer.Character.Heading;
 
             return packet;
         }
