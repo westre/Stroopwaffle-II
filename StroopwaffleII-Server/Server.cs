@@ -13,7 +13,6 @@ namespace StroopwaffleII_Server {
 
         private NetServer NetServer { get; set; }
         private NetworkManager NetworkManager { get; set; }
-        private SendUpdatesThread SendUpdatesThread { get; set; }
 
         public Server() {
             NetPeerConfiguration config = new NetPeerConfiguration("sw2");
@@ -27,12 +26,6 @@ namespace StroopwaffleII_Server {
 
             Thread serverThread = new Thread(ServerThread);
             serverThread.Start();
-
-            SendUpdatesThread = new SendUpdatesThread(this);
-        }
-
-        public void UpdateThread() {
-
         }
 
         public void ServerThread() {
@@ -68,6 +61,7 @@ namespace StroopwaffleII_Server {
                                 Console.WriteLine("Sent message");
                             }
                             else if (status == NetConnectionStatus.Disconnected) {
+                                DestroyClient(incomingMessage.SenderConnection);
                                 Console.WriteLine("|_ disconnected");
                             }
                             break;
@@ -116,9 +110,20 @@ namespace StroopwaffleII_Server {
             newClient.NetConnection = netConnection;
 
             NetworkManager.NetworkClients.Add(newClient);
-            Console.WriteLine("New networkClient added");
+            Console.WriteLine("New networkClient added, size: " + NetworkManager.NetworkClients.Count);
 
             return newClient;
+        }
+
+        private void DestroyClient(NetConnection netConnection) {
+            NetworkClient client = NetworkManager.FindClient(netConnection);
+            if(client != null) {
+                NetworkManager.NetworkClients.Remove(client);
+                Console.WriteLine("Removed networkCLient, size: " + NetworkManager.NetworkClients.Count);
+            }
+            else {
+                Console.WriteLine("Could not find client Server::DestroyClient");
+            }
         }
 
         static void Main(string[] args) {

@@ -38,6 +38,15 @@ namespace StroopwaffleII {
             NetIncomingMessage netIncomingMessage;
 
             while ((netIncomingMessage = LidgrenClient.ServerConnection.Peer.ReadMessage()) != null) {
+                if(netIncomingMessage.MessageType == NetIncomingMessageType.StatusChanged) {
+                    NetConnectionStatus status = (NetConnectionStatus)netIncomingMessage.ReadByte();
+
+                    if(status == NetConnectionStatus.Disconnected) {
+                        Game.DisplayNotification("Disconnected.. clearing lists");
+                        NetworkManager.Clear();
+                    }
+                }
+
                 if (netIncomingMessage.MessageType == NetIncomingMessageType.Data) {
                     PacketType packetType = (PacketType)netIncomingMessage.ReadByte();
                     IPacket packet;

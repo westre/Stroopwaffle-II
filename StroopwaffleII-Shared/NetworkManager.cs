@@ -33,12 +33,18 @@ namespace StroopwaffleII_Shared {
             return -1;
         }
 
-        public NetworkClient Find(NetConnection netConnection) {
+        public NetworkClient FindClient(NetConnection netConnection) {
             var thisClient = (from client in NetworkClients
                              where client.NetConnection == netConnection
                              select client).FirstOrDefault();
 
             return thisClient; 
+        }
+
+        public void Clear() {
+            NetworkClients.Clear();
+            NetworkPeds.Clear();
+            NetworkVehicles.Clear();
         }
     }
 }

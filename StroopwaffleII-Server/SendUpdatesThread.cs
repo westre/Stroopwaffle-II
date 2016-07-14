@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Threading;
 
 // http://www.koonsolo.com/news/dewitters-gameloop/
+// http://gamedev.stackexchange.com/questions/44931/calculating-delta-time-what-is-wrong
+// http://forum.unity3d.com/threads/multiplayer-game-tick-time.164531/
 
 namespace StroopwaffleII_Server {
     class SendUpdatesThread {
@@ -26,7 +28,7 @@ namespace StroopwaffleII_Server {
             int sleepTime = 0;
 
             while(true) {
-                Console.WriteLine("Tick");
+                Tick();
 
                 nextGameTick += SKIP_TICKS;
                 sleepTime = nextGameTick - Environment.TickCount;
@@ -34,10 +36,14 @@ namespace StroopwaffleII_Server {
                 if(sleepTime >= 0) {
                     Thread.Sleep(sleepTime);
                 }
-                else {
+                /*else {
                     Console.WriteLine("We are running behind by " + sleepTime + "ms.");
-                }
+                }*/
             }
+        }
+
+        private void Tick() {
+
         }
     }
 }
