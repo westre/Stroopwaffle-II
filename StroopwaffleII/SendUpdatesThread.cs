@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Lidgren.Network;
+using Rage;
+using StroopwaffleII_Shared;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,9 +40,29 @@ namespace StroopwaffleII {
         }
 
         private void Tick() {
-            //Console.WriteLine("Tick " + Guid.NewGuid());
+            if(NetworkHandler.LidgrenClient.ConnectionStatus == NetConnectionStatus.Connected) {
 
-            
+                if(NetworkHandler.NetworkManager.GetLocalPlayer() != null && NetworkHandler.NetworkManager.GetLocalPlayer().SafeForNet) {
+                    // Send ped packet to the server
+                    PlayerPedPacket playerPedPacket = ConstructPlayerPedPacket();
+                    NetOutgoingMessage message = NetworkHandler.LidgrenClient.CreateMessage();
+                    playerPedPacket.Pack(message);
+                    NetworkHandler.LidgrenClient.SendMessage(message, NetDeliveryMethod.Unreliable);
+                } 
+            }
+        }
+
+        private PlayerPedPacket ConstructPlayerPedPacket() {
+            PlayerPedPacket packet = new PlayerPedPacket();
+            packet.ParentId = NetworkHandler.NetworkManager.GetLocalPlayer().ID;
+            packet.PosX = Game.LocalPlayer.Character.Position.X;
+            packet.PosY = Game.LocalPlayer.Character.Position.Y;
+            packet.PosZ = Game.LocalPlayer.Character.Position.Z;
+            packet.Pitch = Game.LocalPlayer.Character.Rotation.Pitch;
+            packet.Roll = Game.LocalPlayer.Character.Rotation.Roll;
+            packet.Yaw = Game.LocalPlayer.Character.Rotation.Yaw;
+
+            return packet;
         }
     }
 }

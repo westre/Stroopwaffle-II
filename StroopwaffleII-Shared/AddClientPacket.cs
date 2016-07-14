@@ -10,12 +10,14 @@ namespace StroopwaffleII_Shared {
         public int ID { get; set; }
         public string Name { get; set; }
         public long LidgrenId { get; set; }
+        public bool SafeForNet { get; set; }
 
         public void Pack(NetOutgoingMessage message) {
             message.Write((byte)PacketType.AddClient);
             message.Write(ID);
             message.Write(Name);
             message.Write(LidgrenId);
+            message.Write(SafeForNet);
         }
 
         // PacketType gets voided due to it already begin read
@@ -23,6 +25,7 @@ namespace StroopwaffleII_Shared {
             ID = message.ReadInt32();
             Name = message.ReadString();
             LidgrenId = message.ReadInt64();
+            SafeForNet = message.ReadBoolean();
         }
     }
 }

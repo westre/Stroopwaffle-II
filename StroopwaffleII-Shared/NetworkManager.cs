@@ -47,6 +47,7 @@ namespace StroopwaffleII_Shared {
             NetworkClient newClient = new NetworkClient(freeId);
             newClient.Name = packet.Name;
             newClient.LidgrenId = lidgrenId;
+            newClient.SafeForNet = true;
 
             NetworkClients.Add(newClient);
             Console.WriteLine("New networkClient added, size: " + NetworkClients.Count);

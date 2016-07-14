@@ -81,6 +81,7 @@ namespace StroopwaffleII_Server {
 
                             switch (packetType) {
                                 case PacketType.HelloServer: packet = new HelloServerPacket(); break;
+                                case PacketType.PlayerPed: packet = new PlayerPedPacket(); break;
                                 default: packet = null; break;
                             }
 
@@ -98,12 +99,20 @@ namespace StroopwaffleII_Server {
                                 addClient.ID = netClient.ID;
                                 addClient.Name = netClient.Name;
                                 addClient.LidgrenId = netClient.LidgrenId;
+                                addClient.SafeForNet = true;
 
                                 NetOutgoingMessage message = NetServer.CreateMessage();
                                 addClient.Pack(message);
 
                                 // send to all
                                 NetServer.SendMessage(message, NetServer.Connections, NetDeliveryMethod.ReliableOrdered, 0);
+                            }
+                            else if(packet is PlayerPedPacket) {
+                                Console.WriteLine("Recv PlayerPedPacket");
+
+                                PlayerPedPacket playerPedPacket = (PlayerPedPacket)packet;
+
+                                Console.WriteLine(playerPedPacket.ParentId + " :: " + playerPedPacket.PosX + ", " + playerPedPacket.PosY + ", " + playerPedPacket.PosZ);
                             }
 
                             break;

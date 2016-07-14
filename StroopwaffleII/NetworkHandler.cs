@@ -13,7 +13,7 @@ namespace StroopwaffleII {
 
         private NetPeerConfiguration Config { get; set; }
         public NetClient LidgrenClient { get; set; }
-        private NetworkManager NetworkManager { get; set; }
+        public NetworkManager NetworkManager { get; set; }
 
         public NetworkHandler() {
             Config = new NetPeerConfiguration("sw2");
@@ -54,6 +54,7 @@ namespace StroopwaffleII {
                     switch (packetType) {
                         case PacketType.HelloClient: packet = new HelloClientPacket(); break;
                         case PacketType.AddClient: packet = new AddClientPacket(); break;
+                        case PacketType.RemoveClient: packet = new RemoveClientPacket(); break;
                         default: packet = null; break;
                     }
 
@@ -79,6 +80,7 @@ namespace StroopwaffleII {
                         NetworkClient addClient = new NetworkClient(addClientPacket.ID);
                         addClient.Name = addClientPacket.Name;
                         addClient.LidgrenId = addClientPacket.LidgrenId;
+                        addClient.SafeForNet = addClientPacket.SafeForNet;
 
                         NetworkManager.NetworkClients.Add(addClient);
 
