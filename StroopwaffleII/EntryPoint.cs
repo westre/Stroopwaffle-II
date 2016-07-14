@@ -44,8 +44,16 @@ namespace StroopwaffleII {
                     }
                     else {
                         NetworkHandler.Disconnect();
+                        Renderer.Clear();
                         Game.DisplayNotification("Disconnected");
                     }
+                }
+
+                if(Game.IsKeyDown(Keys.NumPad1)) {
+                    Ped p = new Ped("s_m_m_paramedic_01", Game.LocalPlayer.Character.Position, 0f);
+                    p.IsPersistent = true;
+                    p.BlockPermanentEvents = true;
+                    p.CanBeDamaged = false;
                 }
 
                 if (NetworkHandler.LidgrenClient != null && NetworkHandler.LidgrenClient.ServerConnection != null) {
@@ -53,6 +61,7 @@ namespace StroopwaffleII {
                 }
 
                 SendUpdatesThread.OnPluginUpdate();
+                Renderer.Render();
 
                 // Allow other plugins and the game to process.
                 GameFiber.Yield();
