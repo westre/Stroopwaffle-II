@@ -61,7 +61,7 @@ namespace StroopwaffleII_Server {
                                 Console.WriteLine("Sent message");
                             }
                             else if (status == NetConnectionStatus.Disconnected) {
-                                DestroyClient(incomingMessage.SenderConnection);
+                                DestroyClient(incomingMessage.SenderConnection.RemoteUniqueIdentifier);
                                 Console.WriteLine("|_ disconnected");
                             }
                             break;
@@ -81,7 +81,7 @@ namespace StroopwaffleII_Server {
                                 Console.WriteLine("Hello from " + ((HelloServerPacket)packet).Name);
 
                                 // create the client to be held on the server
-                                NetworkClient netClient = CreateClient((HelloServerPacket)packet, incomingMessage.SenderConnection);
+                                NetworkClient netClient = CreateClient((HelloServerPacket)packet, incomingMessage.SenderConnection.RemoteUniqueIdentifier);
 
                                 // then send this newly created client to everyone else to be held
                                 AddClientPacket addClient = new AddClientPacket();
@@ -102,12 +102,12 @@ namespace StroopwaffleII_Server {
             }
         }
 
-        private NetworkClient CreateClient(HelloServerPacket packet, NetConnection netConnection) {
+        private NetworkClient CreateClient(HelloServerPacket packet, long lidgrenId) {
             int freeId = NetworkManager.AllocateEntityID();
 
             NetworkClient newClient = new NetworkClient(freeId);
             newClient.Name = packet.Name;
-            newClient.NetConnection = netConnection;
+            newClient.LidgrenId = lidgrenId;
 
             NetworkManager.NetworkClients.Add(newClient);
             Console.WriteLine("New networkClient added, size: " + NetworkManager.NetworkClients.Count);
@@ -115,8 +115,8 @@ namespace StroopwaffleII_Server {
             return newClient;
         }
 
-        private void DestroyClient(NetConnection netConnection) {
-            NetworkClient client = NetworkManager.FindClient(netConnection);
+        private void DestroyClient(long lidgrenId) {
+            NetworkClient client = NetworkManager.FindClient(lidgrenId);
             if(client != null) {
                 NetworkManager.NetworkClients.Remove(client);
                 Console.WriteLine("Removed networkCLient, size: " + NetworkManager.NetworkClients.Count);

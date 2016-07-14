@@ -33,9 +33,9 @@ namespace StroopwaffleII_Shared {
             return -1;
         }
 
-        public NetworkClient FindClient(NetConnection netConnection) {
+        public NetworkClient FindClient(long lidgrenId) {
             var thisClient = (from client in NetworkClients
-                             where client.NetConnection == netConnection
+                             where client.LidgrenId == lidgrenId
                              select client).FirstOrDefault();
 
             return thisClient; 
