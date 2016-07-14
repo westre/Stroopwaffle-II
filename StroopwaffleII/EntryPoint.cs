@@ -15,12 +15,15 @@ namespace StroopwaffleII {
     public class EntryPoint {
         private GameInitializer GameInitializer { get; set; }
         private NetworkHandler NetworkHandler { get; set; }
+        private SendUpdatesThread SendUpdatesThread { get; set; }
 
         public EntryPoint() {
             GameInitializer = new GameInitializer();
             GameInitializer.DisableScripts();
 
             NetworkHandler = new NetworkHandler();
+
+            SendUpdatesThread = new SendUpdatesThread(NetworkHandler);
 
             while (true) {
                 GameInitializer.DisableByFrame();
@@ -44,6 +47,8 @@ namespace StroopwaffleII {
                 if (NetworkHandler.LidgrenClient != null && NetworkHandler.LidgrenClient.ServerConnection != null) {
                     NetworkHandler.ReadPackets();
                 }
+
+                SendUpdatesThread.OnPluginUpdate();
 
                 // Allow other plugins and the game to process.
                 GameFiber.Yield();
