@@ -57,11 +57,21 @@ namespace StroopwaffleII_Server {
                                 NetOutgoingMessage message = NetServer.CreateMessage();
                                 helloClient.Pack(message);
                                 NetServer.SendMessage(message, incomingMessage.SenderConnection, NetDeliveryMethod.ReliableOrdered);
-
-                                Console.WriteLine("Sent message");
                             }
                             else if (status == NetConnectionStatus.Disconnected) {
-                                DestroyClient(incomingMessage.SenderConnection.RemoteUniqueIdentifier);
+                                NetworkClient networkClient = NetworkManager.FindClient(incomingMessage.SenderConnection.RemoteUniqueIdentifier);
+
+                                RemoveClientPacket removeClient = new RemoveClientPacket();
+                                removeClient.ID = networkClient.ID;
+                                removeClient.LidgrenId = networkClient.LidgrenId;
+
+                                NetOutgoingMessage message = NetServer.CreateMessage();
+                                removeClient.Pack(message);
+                                // send to all
+                                if(NetServer.Connections.Count > 0)
+                                    NetServer.SendMessage(message, NetServer.Connections, NetDeliveryMethod.ReliableOrdered, 0);
+
+                                NetworkManager.DestroyClient(incomingMessage.SenderConnection.RemoteUniqueIdentifier);
                                 Console.WriteLine("|_ disconnected");
                             }
                             break;
@@ -81,7 +91,7 @@ namespace StroopwaffleII_Server {
                                 Console.WriteLine("Hello from " + ((HelloServerPacket)packet).Name);
 
                                 // create the client to be held on the server
-                                NetworkClient netClient = CreateClient((HelloServerPacket)packet, incomingMessage.SenderConnection.RemoteUniqueIdentifier);
+                                NetworkClient netClient = NetworkManager.CreateClient((HelloServerPacket)packet, incomingMessage.SenderConnection.RemoteUniqueIdentifier);
 
                                 // then send this newly created client to everyone else to be held
                                 AddClientPacket addClient = new AddClientPacket();
@@ -104,29 +114,7 @@ namespace StroopwaffleII_Server {
             }
         }
 
-        private NetworkClient CreateClient(HelloServerPacket packet, long lidgrenId) {
-            int freeId = NetworkManager.AllocateEntityID();
-
-            NetworkClient newClient = new NetworkClient(freeId);
-            newClient.Name = packet.Name;
-            newClient.LidgrenId = lidgrenId;
-
-            NetworkManager.NetworkClients.Add(newClient);
-            Console.WriteLine("New networkClient added, size: " + NetworkManager.NetworkClients.Count);
-
-            return newClient;
-        }
-
-        private void DestroyClient(long lidgrenId) {
-            NetworkClient client = NetworkManager.FindClient(lidgrenId);
-            if(client != null) {
-                NetworkManager.NetworkClients.Remove(client);
-                Console.WriteLine("Removed networkCLient, size: " + NetworkManager.NetworkClients.Count);
-            }
-            else {
-                Console.WriteLine("Could not find client Server::DestroyClient");
-            }
-        }
+        
 
         static void Main(string[] args) {
             new Server();

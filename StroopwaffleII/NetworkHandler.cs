@@ -90,6 +90,13 @@ namespace StroopwaffleII {
                             Game.DisplayNotification("This is the localPlayer");
                         }
                     }
+                    else if (packet is RemoveClientPacket) {
+                        Game.DisplayNotification("RemoveClientPacket");
+
+                        RemoveClientPacket removeClientPacket = (RemoveClientPacket)packet;
+
+                        NetworkManager.DestroyClient(removeClientPacket.LidgrenId);
+                    }
                 }
 
                 LidgrenClient.Recycle(netIncomingMessage);

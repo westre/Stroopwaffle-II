@@ -9,7 +9,7 @@ namespace StroopwaffleII {
 
         private NetworkHandler NetworkHandler { get; set; }
 
-        private const int HERTZ = 1;
+        private const int HERTZ = 30;
         private const int SKIP_TICKS = 1000 / HERTZ;
 
         private int OldTickCount { get; set; }
@@ -37,7 +37,9 @@ namespace StroopwaffleII {
         }
 
         private void Tick() {
-            Console.WriteLine("Tick " + Guid.NewGuid());
+            //Console.WriteLine("Tick " + Guid.NewGuid());
+
+            
         }
     }
 }

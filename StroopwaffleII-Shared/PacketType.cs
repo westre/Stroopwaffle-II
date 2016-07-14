@@ -9,5 +9,6 @@ namespace StroopwaffleII_Shared {
         HelloServer,
         HelloClient,
         AddClient,
+        RemoveClient,
     };
 }

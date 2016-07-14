@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RemoveClientPacket.cs" />
     <Compile Include="AddClientPacket.cs" />
     <Compile Include="HelloClientPacket.cs" />
     <Compile Include="HelloServerPacket.cs" />

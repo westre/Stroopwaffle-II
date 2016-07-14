@@ -41,6 +41,30 @@ namespace StroopwaffleII_Shared {
             return thisClient; 
         }
 
+        public NetworkClient CreateClient(HelloServerPacket packet, long lidgrenId) {
+            int freeId = AllocateEntityID();
+
+            NetworkClient newClient = new NetworkClient(freeId);
+            newClient.Name = packet.Name;
+            newClient.LidgrenId = lidgrenId;
+
+            NetworkClients.Add(newClient);
+            Console.WriteLine("New networkClient added, size: " + NetworkClients.Count);
+
+            return newClient;
+        }
+
+        public void DestroyClient(long lidgrenId) {
+            NetworkClient client = FindClient(lidgrenId);
+            if (client != null) {
+                NetworkClients.Remove(client);
+                Console.WriteLine("Removed networkCLient, size: " + NetworkClients.Count);
+            }
+            else {
+                Console.WriteLine("Could not find client Server::DestroyClient");
+            }
+        }
+
         public NetworkClient GetLocalPlayer() {
             var thisClient = (from client in NetworkClients
                               where client.LocalPlayer == true
