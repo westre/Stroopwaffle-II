@@ -20,7 +20,7 @@ namespace StroopwaffleII {
         private Renderer Renderer { get; set; }
 
         private Ped TestPed { get; set; }
-        private bool AimFiberActive { get; set; }
+        private Vehicle TestVehicle { get; set; }
         
         private BlockTasksHandler BlockTasksHandler { get; set; }      
 
@@ -36,9 +36,10 @@ namespace StroopwaffleII {
 
             BlockTasksHandler = new BlockTasksHandler();
 
+            GameInitializer.RemoveAllEntities();
+
             while (true) {
                 GameInitializer.DisableByFrame();
-                GameInitializer.RemoveAllEntities();
 
                 if (Game.IsKeyDown(Keys.NumPad0)) {
                     Game.DisplayNotification("Pressed NumPad0" + Guid.NewGuid());
@@ -62,13 +63,32 @@ namespace StroopwaffleII {
                 }
 
                 if (Game.IsKeyDown(Keys.NumPad2)) {
-                    TestPed = new Ped("s_m_m_paramedic_01", Game.LocalPlayer.Character.Position, 0f);
-                    TestPed.IsPersistent = true;
-                    TestPed.BlockPermanentEvents = true;
-                    TestPed.CanBeDamaged = false;
+                    GameFiber.StartNew(delegate {
+                        Vector3 pos = Game.LocalPlayer.Character.GetOffsetPositionFront(5f);
+                        Vector3 pos2 = Game.LocalPlayer.Character.GetOffsetPositionFront(10f);
 
-                    WeaponAsset asset = new WeaponAsset("WEAPON_PISTOL");
-                    TestPed.Inventory.GiveNewWeapon(asset, 1000, true);
+                        TestPed = new Ped("s_m_m_paramedic_01", Game.LocalPlayer.Character.GetOffsetPositionFront(2f), 0f);
+                        TestPed.IsPersistent = true;
+                        TestPed.BlockPermanentEvents = true;
+                        TestPed.CanBeDamaged = false;
+
+                        WeaponAsset asset = new WeaponAsset("WEAPON_PISTOL");
+                        TestPed.Inventory.GiveNewWeapon(asset, 1000, true);
+
+                        GameFiber.Sleep(2000);
+
+                        TestVehicle = new Vehicle("ENTITYXF", pos);
+                        new Vehicle("ENTITYXF", pos2);
+
+                        GameFiber.Sleep(1000);
+
+                        TestPed.Tasks.EnterVehicle(TestVehicle, -1);
+                    });
+
+                    //Game.LocalPlayer.Character.CurrentVehicle.
+
+                    //new Vehicle("ENTITYXF", Game.LocalPlayer.Character.GetOffsetPosition(Vector3.RelativeFront * 5f));
+  
                 }
 
                 if (NetworkHandler.LidgrenClient != null && NetworkHandler.LidgrenClient.ServerConnection != null) {
@@ -78,7 +98,7 @@ namespace StroopwaffleII {
                 SendUpdatesThread.OnPluginUpdate();
                 Renderer.Render();
 
-                if(TestPed != null) {
+                /*if(TestPed != null) {
                     Vector3 pedPosition = new Vector3(Game.LocalPlayer.Character.Position.X, Game.LocalPlayer.Character.Position.Y + 2, Game.LocalPlayer.Character.Position.Z);
                     Rotator pedRotation = new Rotator(Game.LocalPlayer.Character.Rotation.Pitch, Game.LocalPlayer.Character.Rotation.Roll, Game.LocalPlayer.Character.Rotation.Yaw);
                     Ped localPlayer = Game.LocalPlayer.Character;
@@ -125,7 +145,7 @@ namespace StroopwaffleII {
 
                     TestPed.Position = pedPosition;
                     TestPed.Rotation = pedRotation;
-                }
+                }*/
 
                 // Allow other plugins and the game to process.
                 GameFiber.Yield();

@@ -52,13 +52,13 @@ namespace StroopwaffleII {
                     if (!PhysicalPeds[networkClient].AimFiberActive && !networkClient.NetworkPed.Shooting) {
                         PhysicalPeds[networkClient].AimFiberActive = true;
                         GameFiber.StartNew(delegate {
-                            ped.Tasks.GoToWhileAiming(offsetFront, posLookAt, 0f, networkClient.NetworkPed.Speed, false, FiringPattern.SingleShot);
+                            ped.Tasks.GoToWhileAiming(offsetFront, posLookAt, 0f, networkClient.NetworkPed.Speed, false, FiringPattern.FullAutomatic);
                             GameFiber.Wait(350);
                             PhysicalPeds[networkClient].AimFiberActive = false;
                         });
                     }
                     else if (networkClient.NetworkPed.Shooting) {
-                        ped.Tasks.GoToWhileAiming(offsetFront, posLookAt, 0f, networkClient.NetworkPed.Speed, true, FiringPattern.SingleShot);
+                        ped.Tasks.GoToWhileAiming(offsetFront, posLookAt, 0f, networkClient.NetworkPed.Speed, true, FiringPattern.FullAutomatic);
                     }
                 }
                 else if (!networkClient.NetworkPed.Aiming && !networkClient.NetworkPed.Walking && !networkClient.NetworkPed.Running && !networkClient.NetworkPed.Sprinting) {
