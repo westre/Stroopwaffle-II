@@ -134,6 +134,11 @@ namespace StroopwaffleII_Server {
                                     networkClient.NetworkPed.Reloading = playerPedPacket.Reloading;
 
                                     networkClient.NetworkPed.Heading = playerPedPacket.Heading;
+
+                                    networkClient.NetworkPed.OffsetFrontX = playerPedPacket.OffsetFrontX;
+                                    networkClient.NetworkPed.OffsetFrontY = playerPedPacket.OffsetFrontY;
+                                    networkClient.NetworkPed.OffsetFrontZ = playerPedPacket.OffsetFrontZ;
+                                    networkClient.NetworkPed.Speed = playerPedPacket.Speed;
                                 }
                                 else {
                                     Console.WriteLine("Shit.. networkClient == null @ PlayerPedPacket, Server::ServerThread()");

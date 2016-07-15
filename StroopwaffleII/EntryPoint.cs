@@ -20,6 +20,9 @@ namespace StroopwaffleII {
         private Renderer Renderer { get; set; }
 
         private Ped TestPed { get; set; }
+        private bool AimFiberActive { get; set; }
+        
+        private BlockTasksHandler BlockTasksHandler { get; set; }      
 
         public EntryPoint() {
             GameInitializer = new GameInitializer();
@@ -30,6 +33,8 @@ namespace StroopwaffleII {
             SendUpdatesThread = new SendUpdatesThread(NetworkHandler);
             GraphicsRenderer = new GraphicsRenderer(NetworkHandler);
             Renderer = new Renderer(NetworkHandler);
+
+            BlockTasksHandler = new BlockTasksHandler();
 
             while (true) {
                 GameInitializer.DisableByFrame();
@@ -76,22 +81,50 @@ namespace StroopwaffleII {
                 if(TestPed != null) {
                     Vector3 pedPosition = new Vector3(Game.LocalPlayer.Character.Position.X, Game.LocalPlayer.Character.Position.Y + 2, Game.LocalPlayer.Character.Position.Z);
                     Rotator pedRotation = new Rotator(Game.LocalPlayer.Character.Rotation.Pitch, Game.LocalPlayer.Character.Rotation.Roll, Game.LocalPlayer.Character.Rotation.Yaw);
+                    Ped localPlayer = Game.LocalPlayer.Character;
 
+                    Vector3 camPosition = NativeFunction.Natives.GetGameplayCamCoord<Vector3>();
+                    Vector3 rot = NativeFunction.Natives.GetGameplayCamRot<Vector3>(0);
+                    Vector3 dir = Utility.RotationToDirection(rot);
+                    Vector3 posLookAt = camPosition + dir * 1000f;
 
-                    /*if(!networkClient.NetworkPed.Walking && !networkClient.NetworkPed.Running && !networkClient.NetworkPed.Sprinting) {
-                        ped.Heading = networkClient.NetworkPed.Heading;
+                    if (Game.LocalPlayer.IsFreeAiming && !localPlayer.IsWalking && !localPlayer.IsRunning && !localPlayer.IsSprinting) {
+                        if (!localPlayer.IsShooting && !BlockTasksHandler.Blocked) {
+                            TestPed.Tasks.AimWeaponAt(posLookAt, 10);
+                        }        
+                        else if(localPlayer.IsShooting && !BlockTasksHandler.Blocked) {
+                            NativeFunction.Natives.TaskShootAtCoord(TestPed, posLookAt.X, posLookAt.Y, posLookAt.Z, 355, 0xC6EE6B4C); // full auto
+                            BlockTasksHandler.StartBlock(355);
+                        }
                     }
-                    else if(networkClient.NetworkPed.Walking && !networkClient.NetworkPed.Running && !networkClient.NetworkPed.Running) {
-                        ped.Tasks.GoStraightToPosition(pedPosition, 1f, networkClient.NetworkPed.Heading, 0f, 10);
+                    else if (Game.LocalPlayer.IsFreeAiming && (localPlayer.IsWalking || localPlayer.IsRunning || localPlayer.IsSprinting)) { // running etc.
+                        if (!AimFiberActive && !localPlayer.IsShooting) {
+                            AimFiberActive = true;
+                            GameFiber.StartNew(delegate {
+                                TestPed.Tasks.GoToWhileAiming(Game.LocalPlayer.Character.GetOffsetPositionFront(10f), posLookAt, 0f, localPlayer.Speed, false, FiringPattern.SingleShot);
+                                GameFiber.Wait(350);
+                                AimFiberActive = false;
+                            });
+                        }
+                        else if (localPlayer.IsShooting) {
+                            TestPed.Tasks.GoToWhileAiming(Game.LocalPlayer.Character.GetOffsetPositionFront(10f), posLookAt, 0f, localPlayer.Speed, true, FiringPattern.SingleShot);
+                        }
                     }
-                    else if(!networkClient.NetworkPed.Walking && (networkClient.NetworkPed.Running || networkClient.NetworkPed.Sprinting)) {
-                        ped.Tasks.GoStraightToPosition(pedPosition, 4f, networkClient.NetworkPed.Heading, 0f, 10);
-                    }*/
+                    else if (!Game.LocalPlayer.IsFreeAiming && !localPlayer.IsWalking && !localPlayer.IsRunning && !localPlayer.IsSprinting) {
+                        TestPed.Tasks.Clear();
+                        TestPed.Heading = localPlayer.Heading;
+                    }
+                    else if (!Game.LocalPlayer.IsFreeAiming && localPlayer.IsWalking && !localPlayer.IsRunning && !localPlayer.IsRunning) {
+                        Console.WriteLine("Walking");
+                        TestPed.Tasks.GoStraightToPosition(Game.LocalPlayer.Character.GetOffsetPositionFront(10f), 1f, localPlayer.Heading, 0f, 10);
+                    }
+                    else if (!Game.LocalPlayer.IsFreeAiming && !localPlayer.IsWalking && (localPlayer.IsRunning || localPlayer.IsSprinting)) {
+                        Console.WriteLine("Running");
+                        TestPed.Tasks.GoStraightToPosition(Game.LocalPlayer.Character.GetOffsetPositionFront(10f), 4f, localPlayer.Heading, 0f, 10);
+                    }
 
-                    TestPed.Position = Game.LocalPlayer.Character.Position;
-                    //TestPed.Rotation = pedRotation;
-
-                    TestPed.Tasks.GoStraightToPosition(Game.LocalPlayer.Character.GetOffsetPositionFront(10f), 4f, Game.LocalPlayer.Character.Heading, 0f, 10); // ARGH
+                    TestPed.Position = pedPosition;
+                    TestPed.Rotation = pedRotation;
                 }
 
                 // Allow other plugins and the game to process.

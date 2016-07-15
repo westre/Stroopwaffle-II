@@ -39,8 +39,8 @@ namespace StroopwaffleII {
                 y += 20f;
             }
 
-            e.Graphics.DrawText("LocalPos: " + Game.LocalPlayer.Character.Position.ToString(), "Arial", 16f, new PointF(100, 300), Color.White);
-            e.Graphics.DrawText("Fwd: " + Game.LocalPlayer.Character.ForwardVector.ToString(), "Arial", 16f, new PointF(100, 400), Color.White);
+            //e.Graphics.DrawText("LocalPos: " + Game.LocalPlayer.Character.Position.ToString(), "Arial", 16f, new PointF(100, 300), Color.White);
+            //e.Graphics.DrawText("Fwd: " + Game.LocalPlayer.Character.ForwardVector.ToString(), "Arial", 16f, new PointF(100, 400), Color.White);
 
         }
     }

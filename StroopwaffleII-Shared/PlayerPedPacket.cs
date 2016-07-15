@@ -29,6 +29,11 @@ namespace StroopwaffleII_Shared {
 
         public float Heading { get; set; }
 
+        public float OffsetFrontX { get; set; }
+        public float OffsetFrontY { get; set; }
+        public float OffsetFrontZ { get; set; }
+        public float Speed { get; set; }
+
         public void Pack(NetOutgoingMessage message) {
             message.Write((byte)PacketType.PlayerPed);
             message.Write(ParentId);
@@ -52,6 +57,11 @@ namespace StroopwaffleII_Shared {
             message.Write(Reloading);
 
             message.Write(Heading);
+
+            message.Write(OffsetFrontX);
+            message.Write(OffsetFrontY);
+            message.Write(OffsetFrontZ);
+            message.Write(Speed);
         }
 
         // PacketType gets voided due to it already begin read
@@ -77,6 +87,11 @@ namespace StroopwaffleII_Shared {
             Reloading = message.ReadBoolean();
 
             Heading = message.ReadFloat();
+
+            OffsetFrontX = message.ReadFloat();
+            OffsetFrontY = message.ReadFloat();
+            OffsetFrontZ = message.ReadFloat();
+            Speed = message.ReadFloat();
         }
     }
 }

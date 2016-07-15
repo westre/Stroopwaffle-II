@@ -54,6 +54,11 @@ namespace StroopwaffleII {
         }
 
         private PlayerPedPacket ConstructPlayerPedPacket() {
+            Vector3 camPosition = NativeFunction.Natives.GetGameplayCamCoord<Vector3>();
+            Vector3 rot = NativeFunction.Natives.GetGameplayCamRot<Vector3>(0);
+            Vector3 dir = Utility.RotationToDirection(rot);
+            Vector3 posLookAt = camPosition + dir * 1000f;
+
             PlayerPedPacket packet = new PlayerPedPacket();
             packet.ParentId = NetworkHandler.NetworkManager.GetLocalPlayer().ID;
             packet.PosX = Game.LocalPlayer.Character.Position.X;
@@ -63,10 +68,10 @@ namespace StroopwaffleII {
             packet.Roll = Game.LocalPlayer.Character.Rotation.Roll;
             packet.Yaw = Game.LocalPlayer.Character.Rotation.Yaw;
 
-            packet.Aiming = NativeFunction.Natives.IsPlayerFreeAiming<bool>(Game.LocalPlayer);
-            packet.AimPosX = 20f;
-            packet.AimPosY = 20f;
-            packet.AimPosZ = 20f;
+            packet.Aiming = Game.LocalPlayer.IsFreeAiming;
+            packet.AimPosX = posLookAt.X;
+            packet.AimPosY = posLookAt.Y;
+            packet.AimPosZ = posLookAt.Z;
 
             packet.Shooting = Game.LocalPlayer.Character.IsShooting;
             packet.Walking = Game.LocalPlayer.Character.IsWalking;
@@ -76,6 +81,11 @@ namespace StroopwaffleII {
             packet.Reloading = Game.LocalPlayer.Character.IsReloading;
 
             packet.Heading = Game.LocalPlayer.Character.Heading;
+
+            packet.OffsetFrontX = Game.LocalPlayer.Character.GetOffsetPositionFront(10f).X;
+            packet.OffsetFrontY = Game.LocalPlayer.Character.GetOffsetPositionFront(10f).Y;
+            packet.OffsetFrontZ = Game.LocalPlayer.Character.GetOffsetPositionFront(10f).Z;
+            packet.Speed = Game.LocalPlayer.Character.Speed;
 
             return packet;
         }

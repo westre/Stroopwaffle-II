@@ -27,6 +27,11 @@ namespace StroopwaffleII_Shared {
 
         public float Heading { get; set; }
 
+        public float OffsetFrontX { get; set; }
+        public float OffsetFrontY { get; set; }
+        public float OffsetFrontZ { get; set; }
+        public float Speed { get; set; }
+
         public NetworkPed() {
 
         }
