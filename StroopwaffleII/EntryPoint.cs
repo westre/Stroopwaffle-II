@@ -87,11 +87,6 @@ namespace StroopwaffleII {
 
                         TestPed.Tasks.EnterVehicle(TestVehicle, -1);
                     });
-
-                    //Game.LocalPlayer.Character.CurrentVehicle.
-
-                    //new Vehicle("ENTITYXF", Game.LocalPlayer.Character.GetOffsetPosition(Vector3.RelativeFront * 5f));
-  
                 }
 
 

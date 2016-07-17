@@ -77,7 +77,7 @@ namespace StroopwaffleII_Server {
                             break;
                         case NetIncomingMessageType.Data:
                             PacketType packetType = (PacketType)incomingMessage.ReadByte();
-                            IPacket packet;
+                            Packet packet;
 
                             switch (packetType) {
                                 case PacketType.HelloServer: packet = new HelloServerPacket(); break;
@@ -106,6 +106,21 @@ namespace StroopwaffleII_Server {
 
                                 // send to all
                                 NetServer.SendMessage(message, NetServer.Connections, NetDeliveryMethod.ReliableOrdered, 0);
+
+                                // also send the client their initial position data
+                                PlayerPedSpawnPacket playerPedSpawnPacket = new PlayerPedSpawnPacket();
+                                playerPedSpawnPacket.ParentId = netClient.ID;
+                                playerPedSpawnPacket.Position = new float[] { 652.637f, 6522.557f, 28.21065f };
+
+                                // also make sure to set it in the server's arraylist
+                                netClient.NetworkPed.PosX = 652.637f;
+                                netClient.NetworkPed.PosY = 6522.557f;
+                                netClient.NetworkPed.PosZ = 28.21065f;
+
+                                // send to the client
+                                message = NetServer.CreateMessage();
+                                playerPedSpawnPacket.Pack(message);
+                                NetServer.SendMessage(message, incomingMessage.SenderConnection, NetDeliveryMethod.ReliableOrdered);
                             }
                             else if(packet is PlayerPedPacket) {
                                 Console.WriteLine("Recv PlayerPedPacket");

@@ -26,6 +26,9 @@ namespace StroopwaffleII {
             foreach (string disableThisScript in disabledScripts) {
                 Game.TerminateAllScriptsWithName(disableThisScript);
             }
+
+            NativeFunction.Natives.SetMissionFlag(true);
+            NativeFunction.Natives.PauseClock(true);
         }
 
         public void DisableByFrame() {
@@ -41,7 +44,6 @@ namespace StroopwaffleII {
             NativeFunction.Natives.SetGarbageTrucks(0);
             NativeFunction.Natives.SetRandomBoats(0);
             NativeFunction.Natives.SetRandomTrains(0);
-            NativeFunction.Natives.SetMissionFlag(true);
             NativeFunction.Natives.SetFarDrawVehicles(false);
             NativeFunction.Natives.xF796359A959DF65D(false);
             NativeFunction.Natives.DeleteAllTrains();

@@ -11,5 +11,6 @@ namespace StroopwaffleII_Shared {
         AddClient,
         RemoveClient,
         PlayerPed,
+        PlayerPedSpawn,
     };
 }

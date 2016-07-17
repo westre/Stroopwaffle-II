@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Lidgren.Network;
 
 namespace StroopwaffleII_Shared {
-    public class PlayerPedPacket : IPacket {
+    public class PlayerPedPacket : Packet {
         public int ParentId { get; set; }
         public float PosX { get; set; }
         public float PosY { get; set; }
@@ -34,7 +34,7 @@ namespace StroopwaffleII_Shared {
         public float OffsetFrontZ { get; set; }
         public float Speed { get; set; }
 
-        public void Pack(NetOutgoingMessage message) {
+        public override void Pack(NetOutgoingMessage message) {
             message.Write((byte)PacketType.PlayerPed);
             message.Write(ParentId);
             message.Write(PosX);
@@ -65,7 +65,7 @@ namespace StroopwaffleII_Shared {
         }
 
         // PacketType gets voided due to it already begin read
-        public void Unpack(NetIncomingMessage message) {
+        public override void Unpack(NetIncomingMessage message) {
             ParentId = message.ReadInt32();
             PosX = message.ReadFloat();
             PosY = message.ReadFloat();

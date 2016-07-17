@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PlayerPedPacket.cs" />
+    <Compile Include="PlayerPedSpawnPacket.cs" />
     <Compile Include="RemoveClientPacket.cs" />
     <Compile Include="AddClientPacket.cs" />
     <Compile Include="HelloClientPacket.cs" />

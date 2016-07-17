@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using Lidgren.Network;
 
 namespace StroopwaffleII_Shared {
-    public class HelloClientPacket : IPacket {
+    public class HelloClientPacket : Packet {
         public string Payload { get; set; }
 
-        public void Pack(NetOutgoingMessage message) {
+        public override void Pack(NetOutgoingMessage message) {
             message.Write((byte)PacketType.HelloClient);
             message.Write(Payload);
         }
 
         // PacketType gets voided due to it already begin read
-        public void Unpack(NetIncomingMessage message) {
+        public override void Unpack(NetIncomingMessage message) {
             Payload = message.ReadString();
         }
     }

@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 using Lidgren.Network;
 
 namespace StroopwaffleII_Shared {
-    public class RemoveClientPacket : Packet {
-        public int ID { get; set; }
-        public long LidgrenId { get; set; }
+    public class PlayerPedSpawnPacket : Packet {
+        public int ParentId { get; set; }
+        public float[] Position { get; set; }
 
         public override void Pack(NetOutgoingMessage message) {
-            message.Write((byte)PacketType.RemoveClient);
-            message.Write(ID);
-            message.Write(LidgrenId);
+            message.Write((byte)PacketType.PlayerPedSpawn);
+            message.Write(ParentId);
+            message.Write(Serialize(Position));
         }
 
         // PacketType gets voided due to it already begin read
         public override void Unpack(NetIncomingMessage message) {
-            ID = message.ReadInt32();
-            LidgrenId = message.ReadInt64();
+            ParentId = message.ReadInt32();
+            Position = Deserialize<float[]>(message.ReadString());
         }
     }
 }
