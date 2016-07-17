@@ -57,6 +57,7 @@ namespace StroopwaffleII {
                         case PacketType.RemoveClient: packet = new RemoveClientPacket(); break;
                         case PacketType.PlayerPed: packet = new PlayerPedPacket(); break;
                         case PacketType.PlayerPedSpawn: packet = new PlayerPedSpawnPacket(); break;
+                        case PacketType.Vehicle: packet = new VehiclePacket(); break;
                         default: packet = null; break;
                     }
 
@@ -106,8 +107,9 @@ namespace StroopwaffleII {
 
                         PlayerPedSpawnPacket playerPedSpawnPacket = (PlayerPedSpawnPacket)packet;
                         Game.LocalPlayer.Character.Position = new Vector3(playerPedSpawnPacket.Position[0], playerPedSpawnPacket.Position[1], playerPedSpawnPacket.Position[2]);
-
-                        Console.WriteLine("RECV PPSP");
+                    }
+                    else if (packet is VehiclePacket) {
+                        Console.WriteLine("RECV VehiclePacket");
                     }
                     else if(packet is PlayerPedPacket) {
                         PlayerPedPacket playerPedPacket = (PlayerPedPacket)packet;

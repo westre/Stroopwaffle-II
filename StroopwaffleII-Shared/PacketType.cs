@@ -12,5 +12,8 @@ namespace StroopwaffleII_Shared {
         RemoveClient,
         PlayerPed,
         PlayerPedSpawn,
+        AddVehicle,
+        RemoveVehicle,
+        Vehicle
     };
 }

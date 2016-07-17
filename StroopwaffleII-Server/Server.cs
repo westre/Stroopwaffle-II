@@ -7,12 +7,14 @@ using Lidgren.Network;
 using System.Net;
 using System.Threading;
 using StroopwaffleII_Shared;
+using System.Drawing;
 
 namespace StroopwaffleII_Server {
     class Server {
 
-        private NetServer NetServer { get; set; }
-        private NetworkManager NetworkManager { get; set; }
+        public NetServer NetServer { get; set; }
+        public NetworkManager NetworkManager { get; set; }
+        private SendUpdatesThread SendUpdatesThread { get; set; }
 
         public Server() {
             NetPeerConfiguration config = new NetPeerConfiguration("sw2");
@@ -24,8 +26,12 @@ namespace StroopwaffleII_Server {
             NetServer = new NetServer(config);
             NetServer.Start();
 
+            Initialize();
+
             Thread serverThread = new Thread(ServerThread);
             serverThread.Start();
+
+            SendUpdatesThread = new SendUpdatesThread(this);
         }
 
         public void ServerThread() {
@@ -112,7 +118,7 @@ namespace StroopwaffleII_Server {
                                 playerPedSpawnPacket.ParentId = netClient.ID;
                                 playerPedSpawnPacket.Position = new float[] { 652.637f, 6522.557f, 28.21065f };
 
-                                // also make sure to set it in the server's arraylist
+                                // also make sure to set it in the server's arraylist for AC purposes
                                 netClient.NetworkPed.PosX = 652.637f;
                                 netClient.NetworkPed.PosY = 6522.557f;
                                 netClient.NetworkPed.PosZ = 28.21065f;
@@ -158,15 +164,6 @@ namespace StroopwaffleII_Server {
                                 else {
                                     Console.WriteLine("Shit.. networkClient == null @ PlayerPedPacket, Server::ServerThread()");
                                 }
-
-                                // TODO anti-cheat measures here
-                                // just send the raw packet to the clients
-                                NetOutgoingMessage message = NetServer.CreateMessage();
-                                playerPedPacket.Pack(message);
-                                // send to all
-                                NetServer.SendMessage(message, NetServer.Connections, NetDeliveryMethod.ReliableOrdered, 0);
-
-                                Console.WriteLine(playerPedPacket.ParentId + " :: " + playerPedPacket.PosX + ", " + playerPedPacket.PosY + ", " + playerPedPacket.PosZ);
                             }
 
                             break;
@@ -177,7 +174,42 @@ namespace StroopwaffleII_Server {
             }
         }
 
-        
+        private void Initialize() {
+            NetworkManager.NetworkVehicles.Add(new NetworkVehicle(NetworkManager.AllocateEntityID()) {
+                Name = "police",
+                Position = new float[] { 655.637f, 6522.557f, 28.21065f },
+                Heading = 180f,
+                PrimaryColor = Color.Orange,
+                SecondaryColor = Color.Orange
+            });
+
+            NetworkManager.NetworkVehicles.Add(new NetworkVehicle(NetworkManager.AllocateEntityID()) {
+                Name = "police",
+                Position = new float[] { 660.637f, 6522.557f, 28.21065f },
+                Heading = 180f,
+                PrimaryColor = Color.Orange,
+                SecondaryColor = Color.Orange
+            });
+
+            NetworkManager.NetworkVehicles.Add(new NetworkVehicle(NetworkManager.AllocateEntityID()) {
+                Name = "police2",
+                Position = new float[] { 665.637f, 6522.557f, 28.21065f },
+                Heading = 180f,
+                PrimaryColor = Color.Orange,
+                SecondaryColor = Color.Orange
+            });
+        }
+
+        public AddVehiclePacket ConstructAddVehiclePacket() {
+            return new AddVehiclePacket {
+                ID = NetworkManager.AllocateEntityID(),
+                Name = "police",
+                Position = new float[] { 655.637f, 6522.557f, 28.21065f },
+                Heading = 180f,
+                PrimaryColor = Color.Orange,
+                SecondaryColor = Color.Orange
+            };
+        }
 
         static void Main(string[] args) {
             new Server();

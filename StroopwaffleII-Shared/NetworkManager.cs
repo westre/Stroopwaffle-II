@@ -8,14 +8,12 @@ using System.Threading.Tasks;
 namespace StroopwaffleII_Shared {
     public class NetworkManager {
         public List<NetworkClient> NetworkClients { get; set; }
-        public List<NetworkPed> NetworkPeds { get; set; }
         public List<NetworkVehicle> NetworkVehicles { get; set; }
 
         private bool[] EntityIDs { get; set; }
 
         public NetworkManager() {
             NetworkClients = new List<NetworkClient>();
-            NetworkPeds = new List<NetworkPed>();
             NetworkVehicles = new List<NetworkVehicle>();
 
             EntityIDs = new bool[1000];
@@ -81,11 +79,10 @@ namespace StroopwaffleII_Shared {
                               select client).FirstOrDefault();
 
             return thisClient;
-        } 
+        }
 
         public void Clear() {
             NetworkClients.Clear();
-            NetworkPeds.Clear();
             NetworkVehicles.Clear();
         }
     }
