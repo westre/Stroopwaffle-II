@@ -24,6 +24,9 @@ namespace StroopwaffleII {
         
         private BlockTasksHandler BlockTasksHandler { get; set; }      
 
+        private int Counter { get; set; }
+        private bool BusyLerping { get; set; }
+
         public EntryPoint() {
             GameInitializer = new GameInitializer();
             GameInitializer.DisableScripts();
@@ -77,8 +80,8 @@ namespace StroopwaffleII {
 
                         GameFiber.Sleep(2000);
 
-                        TestVehicle = new Vehicle("ENTITYXF", pos);
-                        new Vehicle("ENTITYXF", pos2);
+                        TestVehicle = new Vehicle("police", pos);
+                        new Vehicle("police", pos2);
 
                         GameFiber.Sleep(1000);
 
@@ -90,6 +93,54 @@ namespace StroopwaffleII {
                     //new Vehicle("ENTITYXF", Game.LocalPlayer.Character.GetOffsetPosition(Vector3.RelativeFront * 5f));
   
                 }
+
+
+                if(TestPed != null && TestPed.CurrentVehicle != null) {
+                    TestPed.CurrentVehicle.IsEngineOn = true;
+                    TestPed.CurrentVehicle.CanBeDamaged = false;
+                    TestPed.CurrentVehicle.CanTiresBurst = false;
+                    TestPed.CurrentVehicle.MakePersistent();
+
+                    if(Game.LocalPlayer.Character.CurrentVehicle != null) {
+                        TestPed.CurrentVehicle.SteeringAngle = Game.LocalPlayer.Character.CurrentVehicle.SteeringAngle;
+                        TestPed.CurrentVehicle.SteeringScale = Game.LocalPlayer.Character.CurrentVehicle.SteeringScale;                   
+                        TestPed.CurrentVehicle.CollisionIgnoredEntity = Game.LocalPlayer.Character.CurrentVehicle;
+                        TestPed.CurrentVehicle.IsSirenOn = Game.LocalPlayer.Character.CurrentVehicle.IsSirenOn;
+                        TestPed.CurrentVehicle.IsEngineStarting = Game.LocalPlayer.Character.CurrentVehicle.IsEngineStarting;
+                        TestPed.CurrentVehicle.IsEngineOn = Game.LocalPlayer.Character.CurrentVehicle.IsEngineOn;
+
+                        Game.LocalPlayer.Character.CurrentVehicle.Opacity = 0.1f;
+
+                        // new code
+                        NativeFunction.Natives.SetVehicleForwardSpeed(TestPed.CurrentVehicle, Game.LocalPlayer.Character.CurrentVehicle.Speed);
+                        TestPed.CurrentVehicle.SetRotationYaw(Game.LocalPlayer.Character.CurrentVehicle.Rotation.Yaw);
+
+                        if (TestPed.CurrentVehicle.Position.DistanceTo(Game.LocalPlayer.Character.CurrentVehicle.Position + new Vector3(0, 5, 0)) >= 0.6 && !BusyLerping) {
+                            GameFiber.StartNew(delegate {
+                                BusyLerping = true;
+                                for (float percent = 0; percent < 1; percent += 0.05f) {
+                                    Vector3 lerped = new Vector3();
+
+                                    lerped.X = MathHelper.Lerp(TestPed.CurrentVehicle.Position.X, Game.LocalPlayer.Character.CurrentVehicle.Position.X, percent);
+                                    lerped.Y = MathHelper.Lerp(TestPed.CurrentVehicle.Position.Y, Game.LocalPlayer.Character.CurrentVehicle.Position.Y + 5, percent);
+                                    lerped.Z = MathHelper.Lerp(TestPed.CurrentVehicle.Position.Z, Game.LocalPlayer.Character.CurrentVehicle.Position.Z, percent);
+
+                                    if (Game.LocalPlayer.Character.CurrentVehicle.IsInAir) {
+                                        TestPed.CurrentVehicle.Rotation = Game.LocalPlayer.Character.CurrentVehicle.Rotation;
+                                        TestPed.CurrentVehicle.Position = lerped;
+                                    }
+                                    else {
+                                        TestPed.CurrentVehicle.SetPositionWithSnap(lerped);
+                                    }
+                                    NativeFunction.Natives.SetVehicleForwardSpeed(TestPed.CurrentVehicle, Game.LocalPlayer.Character.CurrentVehicle.Speed);
+                                    GameFiber.Sleep(1);
+                                }
+                                BusyLerping = false;
+                            });
+                        }
+                        //end of new code                
+                    }
+                }  
 
                 if (NetworkHandler.LidgrenClient != null && NetworkHandler.LidgrenClient.ServerConnection != null) {
                     NetworkHandler.ReadPackets();

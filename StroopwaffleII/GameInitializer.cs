@@ -41,6 +41,24 @@ namespace StroopwaffleII {
             NativeFunction.Natives.SetGarbageTrucks(0);
             NativeFunction.Natives.SetRandomBoats(0);
             NativeFunction.Natives.SetRandomTrains(0);
+            NativeFunction.Natives.SetMissionFlag(true);
+            NativeFunction.Natives.SetFarDrawVehicles(false);
+            NativeFunction.Natives.xF796359A959DF65D(false);
+            NativeFunction.Natives.DeleteAllTrains();
+            NativeFunction.Natives.SetNumberOfParkedVehicles(-1);
+            NativeFunction.Natives.SetAllLowPriorityVehicleGeneratorsActive(false);
+            NativeFunction.Natives.SetCreateRandomCopsNotOnScenarios(false);
+            NativeFunction.Natives.SetCreateRandomCops(false);
+            NativeFunction.Natives.SetCreateRandomCopsOnScenarios(false);
+            NativeFunction.Natives.SetMaxWantedLevel(0);
+            NativeFunction.Natives.DestroyMobilePhone();
+            NativeFunction.Natives.SetVehiclePopulationBudget(0);
+            NativeFunction.Natives.SetPedPopulationBudget(0);
+            NativeFunction.Natives.DisableControlAction(2, 19, true);
+            NativeFunction.Natives.x170F541E1CADD1DE(true);
+            NativeFunction.Natives.ShowHudComponentThisFrame(3);
+            NativeFunction.Natives.ShowHudComponentThisFrame(4);
+            NativeFunction.Natives.DisplayCash(true);
         }
 
         public void RemoveAllEntities() {
