@@ -15,7 +15,7 @@ namespace StroopwaffleII_Server {
     class SendUpdatesThread {
         private Server Server { get; set; }
         private Thread Thread { get; set; }
-        private const int HERTZ = 30;
+        private const int HERTZ = 60;
         private const int SKIP_TICKS = 1000 / HERTZ;
 
         public SendUpdatesThread(Server server) {

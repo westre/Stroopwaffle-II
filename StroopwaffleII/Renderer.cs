@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace StroopwaffleII {
     class Renderer {
         private NetworkHandler NetworkHandler { get; set; }
-
+        private bool ProcessingPedInterpolation { get; set;}
         Dictionary<NetworkClient, RenderPed> PhysicalPeds { get; set; }
 
         public Renderer(NetworkHandler networkHandler) {
@@ -74,7 +74,27 @@ namespace StroopwaffleII {
                     ped.Tasks.GoStraightToPosition(offsetFront, 4f, networkClient.NetworkPed.Heading, 0f, 10);
                 }
 
-                ped.Position = pedPosition;
+                // Interpolation
+                if(NetworkHandler.BetweenFrames) {
+                    // 1 / 60 = 0.016! * 1000 = 1.666!
+                    float hz = (1 / (float)SendUpdatesThread.HERTZ) * 1000f;
+
+                    GameFiber.StartNew(delegate {
+                        // divide by 2 so we can use Sleep(1)
+                        for (float till = 0; till < hz / 2f; till += 1f) {
+                            Vector3 lerped = new Vector3();
+
+                            lerped.X = MathHelper.Lerp(ped.Position.X, pedPosition.X, till / (hz / 2f));
+                            lerped.Y = MathHelper.Lerp(ped.Position.Y, pedPosition.Y, till / (hz / 2f));
+                            lerped.Z = MathHelper.Lerp(ped.Position.Z, pedPosition.Z, till / (hz / 2f));
+
+                            ped.Position = lerped;
+                            GameFiber.Sleep(1);
+                        }
+                        NetworkHandler.BetweenFrames = false;
+                    }); 
+                }
+          
                 ped.Rotation = pedRotation;
             }
         }

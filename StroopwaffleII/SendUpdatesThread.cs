@@ -13,8 +13,8 @@ namespace StroopwaffleII {
 
         private NetworkHandler NetworkHandler { get; set; }
 
-        private const int HERTZ = 30;
-        private const int SKIP_TICKS = 1000 / HERTZ;
+        public static int HERTZ = 60;
+        private int SKIP_TICKS = 1000 / HERTZ;
 
         private int OldTickCount { get; set; }
         private int NewTickCount { get; set; }

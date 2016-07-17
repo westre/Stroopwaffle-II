@@ -15,6 +15,8 @@ namespace StroopwaffleII {
         public NetClient LidgrenClient { get; set; }
         public NetworkManager NetworkManager { get; set; }
 
+        public bool BetweenFrames { get; set; }
+
         public NetworkHandler() {
             Config = new NetPeerConfiguration("sw2");
             //Config.AutoFlushSendQueue = false;
@@ -109,7 +111,7 @@ namespace StroopwaffleII {
                         Game.LocalPlayer.Character.Position = new Vector3(playerPedSpawnPacket.Position[0], playerPedSpawnPacket.Position[1], playerPedSpawnPacket.Position[2]);
                     }
                     else if (packet is VehiclePacket) {
-                        Console.WriteLine("RECV VehiclePacket");
+                        //Console.WriteLine("RECV VehiclePacket");
                     }
                     else if(packet is PlayerPedPacket) {
                         PlayerPedPacket playerPedPacket = (PlayerPedPacket)packet;
@@ -141,6 +143,8 @@ namespace StroopwaffleII {
                             networkClient.NetworkPed.OffsetFrontY = playerPedPacket.OffsetFrontY;
                             networkClient.NetworkPed.OffsetFrontZ = playerPedPacket.OffsetFrontZ;
                             networkClient.NetworkPed.Speed = playerPedPacket.Speed;
+
+                            BetweenFrames = true;
                         }
                         else {
                             Console.WriteLine("Shit.. networkClient == null @ PlayerPedPacket, NetworkHandler::ReadPackets()");

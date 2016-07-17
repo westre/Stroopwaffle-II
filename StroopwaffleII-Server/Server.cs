@@ -129,8 +129,6 @@ namespace StroopwaffleII_Server {
                                 NetServer.SendMessage(message, incomingMessage.SenderConnection, NetDeliveryMethod.ReliableOrdered);
                             }
                             else if(packet is PlayerPedPacket) {
-                                Console.WriteLine("Recv PlayerPedPacket");
-
                                 PlayerPedPacket playerPedPacket = (PlayerPedPacket)packet;
 
                                 NetworkClient networkClient = NetworkManager.FindClientById(playerPedPacket.ParentId);
